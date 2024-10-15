@@ -1,0 +1,28 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  dbservice:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: RZj4bqi4JsDsm7nPla8I9XymHqx6oZrd
+      POSTGRES_DB: dbtpamama
+    volumes:
+      - ./postgresdb:/var/lib/postgresql/data
+
+  app:
+    image: ddsdeploy
+    restart: always
+    ports:
+      - "8080:8089"  # Mapea el puerto 8080 del host al puerto 8089 del contenedor
+    environment:
+      PORT: 8089
+      hibernate.hbm2ddl.auto: update
+      javax.persistence.jdbc.driver: org.postgresql.Driver
+      javax.persistence.jdbc.password: 123
+      javax.persistence.jdbc.url: jdbc:postgresql://dbservice/dblibros
+      javax.persistence.jdbc.user: postgres
+    depends_on:
+      - dbservice
